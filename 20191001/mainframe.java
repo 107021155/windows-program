@@ -36,26 +36,28 @@ public class mainframe extends JFrame{
             pnl.add(jbtns[i]);
             jbtns[i].setFont(new Font(null, Font.PLAIN,24));
             jbtns.addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent ae){
-                 JButton jbtns = (JButton)ae.getSource();
-                 int vx = jbtn.getText().charAt(0) - '0';
-                 if (vx >= 0 && vx <=9) {
-                     float v1 = Float.parseFloat(lab.getText());
-                     if(isOpclick){
-                        lab.setText("");
-                        isOpclick = false;             
-                    }
-                    if(v1 == 0.0f){
-                        if(isDotClick){
+                 public void actionPerformed(ActionEvent ae){
+                  JButton jbtns = (JButton)ae.getSource();
+                  int vx = jbtn.getText().charAt(0) - '0';
+                     if (vx >= 0 && vx <=9) {
+                          float v1 = Float.parseFloat(lab.getText());
+                         if(isOpclick){
+                             lab.setText("");
+                             isOpclick = false;             
+                         }    
+                         if(v1 == 0.0f){
+                          if(isDotClick){
                             lab.setText(lab.getText() + jbtn.getText());
-                        }else{
+                          }else{
                             lab.setText(jbtn.getText());
+                          }
+                        }else{
+                           lab.setText(lab,getText() + jbtn.getText());
+                         } 
                         }
-                    }else{
-                       lab.setText(lab,getText() + jbtn.getText());
-                    } 
-                 }
-            });  
-        }
+                    }                   
+                 }  
+             });  
+         }    
      }  
 }
