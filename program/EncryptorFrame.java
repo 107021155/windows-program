@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class EncryptorFrame extends JInternalFrame {
     private Container cp;
@@ -53,6 +54,85 @@ public class EncryptorFrame extends JInternalFrame {
         gp.add(jrb1);
         gp.add(jrb2);
         jrb1.setSelected(true);
+
+
+        jbtBrowse.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                JFileChooser jfc = new JFileChooser();
+                jfc.setCurrentDirectory(new File("./"));
+                int fileState = jfc.showOpenDialog(EncryptorFrame.this);
+                if(fileState == JFileChooser.APPROVE_OPTION){
+                    try {
+                        File selectFile = jfc.getSelectedFile();
+                        jtf.setText(selectFile.getPath());
+
+                        FileInputStream fis = new FileInputStream(selectFile.getPath());
+                        InputStreamReader isr = new InputStreamReader(fis, "UTF8");
+                        BufferedReader buf = new BufferedReader(isr);
+
+                        String line;
+                        while((line = buf.readLine()) != null){
+                            jta.append(line + "\n");
+                        }
+                        buf.close();
+                        isr.close();
+                        fis.close();
+                    }catch (IOException ioe) {
+                       JOptionPane.showMessageDialog(EncryptorFrame.this, ioe.toString());
+                    }catch(Exception err){
+                       JOptionPane.showMessageDialog(EncryptorFrame.this, err.toString());
+                    }
+                }
+            }
+        });
+
+        jbtStart.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+               if(jrb1.isSelected()){
+                   switch (jcb.getSelectedIndex()) {
+                       case 0:
+                          char data[] = jta.getText().toCharArray();
+                          int key = Integer.parseInt(jtfKey.getText());
+                          for(int i=0; i<data.length; i++){
+                           data[i] = (char) (data[i] + key);
+                          }
+                         jta.setText(new String(data));
+                           break;
+                       case 1:
+                            char data1[] = jta.getText().toCharArray();
+                            char xorKey[] = jtfKey.getText().toCharArray();
+                           int j = 0;
+                           for(int i=0; i<data1.length; i++){
+                               data1[i] = (char) (data1[i] + xorKey[ j % xorKey.length]);
+                              j++;
+                              }
+                            jta.setText(new String(data1));
+                           break;
+                   }
+               }else{
+                 switch (jcb.getSelectedIndex()) {
+                    case 0:
+                       char data[] = jta.getText().toCharArray();
+                       int key = Integer.parseInt(jtfKey.getText());
+                       for(int i=0; i<data.length; i++){
+                        data[i] = (char) (data[i] - key);
+                       }
+                      jta.setText(new String(data));
+                        break;
+                    case 1:
+                      char data1[] = jta.getText().toCharArray();
+                      char xorKey[] = jtfKey.getText().toCharArray();
+                      int j = 0;
+                      for(int i=0; i<data1.length; i++){
+                          data1[i] = (char) (data1[i] - xorKey[ j % xorKey.length]);
+                         j++;
+                         }
+                           jta.setText(new String(data1));
+                        break;
+                 }
+               }
+            }
+        });
 
     }
 }
